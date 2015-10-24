@@ -76,7 +76,7 @@ function getRoute(routeItem) {
         throw 'Undefined or empty "route" property in "lib/config/route.config.json"';
     }
 
-    return routeItem.route;
+    return '/api/v1' + routeItem.route;
 }
 function getSecure(routeItem) {
     if (!routeItem || routeItem.secure === undefined) {

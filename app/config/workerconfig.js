@@ -1,5 +1,6 @@
 var http = require('http');
 var express = require('express');
+var path = require('path');
 var application = express();
 var bodyParser = require('body-parser');
 var routeConfig = require('./routeconfig');
@@ -13,7 +14,6 @@ function configureWorker(application) {
 }
 
 function configureApplication(application) {
-    //FIXME make rollbar only run on prod environment
     application.use(bodyParser.json({limit: '50mb'}));
     application.use(bodyParser.urlencoded({extended: true,limit: '50mb',parameterLimit: 10000}));
 
@@ -26,7 +26,11 @@ function configureApplication(application) {
         next();
     });
 
-    application.use('/docs',express.static(__dirname + '/../docs'));
+    application.use(express.static(path.join(__dirname, '../public')));
+    application.engine('html', require('ejs').renderFile);
+    application.get('/', function(req, res){
+       res.render('../app/views/index.html');
+    });
 }
 
 
