@@ -13,7 +13,7 @@ function get(req, res, next) {
 		throw httpError(400, 'Invalid params no url');
 	}
 
-	ArticleDataService.getArticleDataFromUrls([url, url]).then(function(articleData){
+	ArticleDataService.getArticleDataFromUrls([url]).then(function(articleData){
 		res.json(articleData);
 	});
 }
