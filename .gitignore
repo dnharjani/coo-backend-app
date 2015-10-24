@@ -1,1 +1,4 @@
 node_modules/
+app/config/settings/settings.config.dev.json
+app/config/settings/settings.config.prod.json
+app/config/settings/settings.config.test.json

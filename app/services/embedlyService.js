@@ -2,9 +2,10 @@ var _ = require('underscore');
 var httpError = require('http-errors');
 var Promise = require('promise');
 var request = require('request');
+var settingsConfig = require('../config/settings/settingsconfig');
 
-function EmbedlyService(apiKey) {
-	this.apiKey = apiKey || "b49730e3de194fc1a1411ccc6cb44a1c";
+function EmbedlyService() {
+	this.apiKey = settingsConfig.settings.embedlyApiKey;
 	this.apiUrl ="http://api.embed.ly/1/extract?key="+this.apiKey+"&format=json";
 }
 
