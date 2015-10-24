@@ -12,17 +12,10 @@ function get(req, res, next) {
 	if(!feed) {
 		throw httpError(400, 'Invalid params no feed');
 	}
-
-	var extractor = UrlExtractorFactory.getExtractorForFeed(feed);
-	if(extractor) {
-		extractor.extractUrlsFromFeed(feed).then(function(feedItems){
-			res.json(feedItems);
-		});
-	}
-	else {
-		res.json({'feedItems': []});
-	}
-		
+	
+	UrlExtractorFactory.extractUrlsFromFeed(feed).then(function(feedItems){
+		res.json(feedItems);
+	});
 }
 
 function post(req, res, next) {

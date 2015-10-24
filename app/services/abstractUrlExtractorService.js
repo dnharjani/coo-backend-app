@@ -16,7 +16,6 @@ AbstractUrlExtractor.prototype.extractUrlsFromJsonData = function(json) {
 
 // Get URLs takes a feed and requests the URL data from it
 AbstractUrlExtractor.prototype.getUrls = function(feed) {
-	console.log('getting urls');
 	return new Promise(function (resolve, reject) {
 
 		request(feed, function (error, response, body) {
@@ -33,8 +32,7 @@ AbstractUrlExtractor.prototype.getUrls = function(feed) {
 AbstractUrlExtractor.prototype.extractUrlsFromFeed = function(feed) {
 	var self = this;
 	return this.getUrls(feed).then(function(feedJson){
-		console.log('extracting urls from json')
-		return self.extractUrlsFromJsonData(JSON.parse(feedJson.body));
+		return self.extractUrlsFromJsonData(JSON.parse(feedJson.body), feed);
 	});
 }
 

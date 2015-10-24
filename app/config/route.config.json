@@ -1,14 +1,24 @@
 {
   "routes": [
     {
-      "route": "/article/:url",
+      "route": "/articles/:feed",
+      "method": "POST",
+      "secure": false,
+      "permissions": [
+        {
+        }
+      ],
+      "controller": "../controllers/feedArticleController"
+    },
+    {
+      "route": "/articles/:feed",
       "method": "GET",
       "secure": false,
       "permissions": [
         {
         }
       ],
-      "controller": "../controllers/articleController"
+      "controller": "../controllers/feedArticleController"
     },
     {
       "route": "/feed/:feed",

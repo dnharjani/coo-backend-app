@@ -20,6 +20,21 @@ UrlExtractorFactory.prototype.getExtractorForFeed = function(feed) {
 	return foundExtractor;
 }
 
+UrlExtractorFactory.prototype.extractUrlsFromFeed = function(feed) {
+	var self = this;
+	return new Promise(function (resolve, reject) {
+		var extractor = self.getExtractorForFeed(feed);
+		if(extractor) {
+			return extractor.extractUrlsFromFeed(feed).then(function(feedItems){
+				resolve(feedItems);
+			});
+		}
+		else {
+			resolve([]);
+		}
+	});
+}
+
 
 
 module.exports = new UrlExtractorFactory();
