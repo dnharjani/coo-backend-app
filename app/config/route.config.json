@@ -2,16 +2,6 @@
   "routes": [
     {
       "route": "/articles/:feed",
-      "method": "POST",
-      "secure": false,
-      "permissions": [
-        {
-        }
-      ],
-      "controller": "../controllers/feedArticleController"
-    },
-    {
-      "route": "/articles/:feed",
       "method": "GET",
       "secure": false,
       "permissions": [

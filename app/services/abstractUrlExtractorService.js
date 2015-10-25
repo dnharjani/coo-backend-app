@@ -14,8 +14,15 @@ AbstractUrlExtractor.prototype.extractUrlsFromJsonData = function(json) {
 	});
 }
 
+// Parses a feed in case it needs any prefixes / suffixes added to it
+AbstractUrlExtractor.prototype.parseFeed = function(feed) {
+	return feed;
+}
+
 // Get URLs takes a feed and requests the URL data from it
 AbstractUrlExtractor.prototype.getUrls = function(feed) {
+	var feed = this.parseFeed(feed);
+
 	return new Promise(function (resolve, reject) {
 
 		request(feed, function (error, response, body) {
@@ -29,9 +36,11 @@ AbstractUrlExtractor.prototype.getUrls = function(feed) {
 	});
 }
 
+// Requests and extracts urls from a feed
 AbstractUrlExtractor.prototype.extractUrlsFromFeed = function(feed) {
 	var self = this;
 	return this.getUrls(feed).then(function(feedJson){
+		console.log("Got data from feed " + feed);
 		return self.extractUrlsFromJsonData(JSON.parse(feedJson.body), feed);
 	});
 }
@@ -41,6 +50,7 @@ AbstractUrlExtractor.prototype.canExtractFromFeed = function(feed) {
 	return false;
 }
 
+// Returns the hostname of a feed url
 AbstractUrlExtractor.prototype.getHostFromUrl = function(feed) {
 	return URL.parse(feed).hostname;
 }

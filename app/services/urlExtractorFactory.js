@@ -10,6 +10,7 @@ function UrlExtractorFactory() {
 }
 
 UrlExtractorFactory.prototype.getExtractorForFeed = function(feed) {
+	console.log('Getting extractor for feed '+ feed);
 	var foundExtractor = null;
 	_.each(this.extractors, function(extractor){
 		if(extractor.canExtractFromFeed(feed)) {
@@ -25,7 +26,9 @@ UrlExtractorFactory.prototype.extractUrlsFromFeed = function(feed) {
 	return new Promise(function (resolve, reject) {
 		var extractor = self.getExtractorForFeed(feed);
 		if(extractor) {
+			console.log('Extractor found for feed '+feed);
 			return extractor.extractUrlsFromFeed(feed).then(function(feedItems){
+				console.log('Feed items extracted from feed' + feed);
 				resolve(feedItems);
 			});
 		}

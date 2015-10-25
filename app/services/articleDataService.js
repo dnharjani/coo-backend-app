@@ -2,7 +2,7 @@ var _ = require('underscore');
 var httpError = require('http-errors');
 var Promise = require('promise');
 var EmbedlyService = require('./embedlyService');
-var Article = require('../models/article');
+var ArticleFactory = require('./articleFactory');
 
 function ArticleDataService() {
 	
@@ -13,7 +13,7 @@ var createArticlesFromData = function(articleData) {
 	var returnArticles = [];
 
 	_.each(articles, function(article){
-		var articleObject = new Article({
+		var args = {
 			domain: article.provider_url,
 			description: article.description,
 			authors: article.authors,
@@ -26,9 +26,12 @@ var createArticlesFromData = function(articleData) {
 			published: article.published,
 			provider_name: article.provider_name,
 			content: article.content
-		});
+		}
 
-		returnArticles.push(articleObject);
+		var newArticle = ArticleFactory.createArticle(args);
+		if(newArticle) {
+			returnArticles.push(newArticle);
+		}
 	});
 
 	return returnArticles;

@@ -33,6 +33,14 @@ RedditUrlExtractor.prototype.canExtractFromFeed = function(feed) {
 	return host ? host.indexOf('reddit') !== -1 : false
 }
 
+RedditUrlExtractor.prototype.parseFeed = function(feed) {
+	if(feed.indexOf('.json') === -1) {
+		feed = feed + '.json';
+	}
+
+	return feed;
+}
+
 
 module.exports = RedditUrlExtractor
 

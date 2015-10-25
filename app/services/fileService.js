@@ -7,6 +7,14 @@ function FileService() {
 	
 }
 
+FileService.prototype.convertUrlToFileName = function(url) {
+	url = url.replace("https", "");
+	url = url.replace("http", "");
+	url = JSON.stringify(url).replace(/\W/g, '');
+	url = url + '.json';
+	return url;
+}
+
 FileService.prototype.readFile = function(path) {
 	return new Promise(function (resolve, reject) {
 		fs.readFile(path, function(err, data) {

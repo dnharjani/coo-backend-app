@@ -16,44 +16,35 @@ function get(req, res, next) {
 		throw httpError(400, 'Invalid params no feed');
 	}
 
-	FileService.readFile("articles.json").then(
+	var feedNameAsFile = FileService.convertUrlToFileName(feed);
+
+	console.log('Reading feed from file '+ feedNameAsFile);
+
+	FileService.readFile(feedNameAsFile).then(
 		function(articleData){
+			console.log('Read feed from file ' + feedNameAsFile);
 			res.json(articleData);
 		},
 		function(){
+			console.log('Couldnt read feed from file ' + feedNameAsFile);
+
 			UrlExtractorFactory.extractUrlsFromFeed(feed).then(function(feedItems){
+				console.log('Urls extracted from feed '+ feed);
+
 				ArticleDataService.getArticleDataFromFeedItems(feedItems).then(function(articleData){
-					res.json({articles: articleData, feed: feed});
+					console.log('Articles created from feed ' + feed);
+					FileService.writeFile(feedNameAsFile, {articles: articleData, feed: feed}).then(function(){
+						console.log('Articles written to file ' + feedNameAsFile);
+						res.json({articles: articleData, feed: feed});
+					});
 				});
 			});
 		}
 	);
 }
 
-function post(req, res, next) {
-	var feed = req.params.feed;
-
-	if(!feed) {
-		throw httpError(400, 'Invalid params no feed');
-	}
-
-	UrlExtractorFactory.extractUrlsFromFeed(feed).then(function(feedItems){
-		ArticleDataService.getArticleDataFromFeedItems(feedItems).then(function(articleData){
-			FileService.writeFile("articles.json", {articles: articleData, feed: feed}).then(function(){
-				res.json({success: true});
-			})
-		});
-	});
-}
-
-function put(req, res, next) {
-
-}
-
-
 FeedArticleController.prototype = {
-    get: get,
-    post: post
+    get: get
 };
 
 module.exports = new FeedArticleController();
