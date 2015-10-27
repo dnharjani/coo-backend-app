@@ -9,7 +9,12 @@ function ArticleDataService() {
 }
 
 var createArticlesFromData = function(articleData) {
-	var articles = JSON.parse(articleData);
+	var articles = articleData;
+
+	if(!_.isArray(articles)) {
+		articles = [articles];
+	}
+
 	var returnArticles = [];
 
 	_.each(articles, function(article){
@@ -29,6 +34,7 @@ var createArticlesFromData = function(articleData) {
 		}
 
 		var newArticle = ArticleFactory.createArticle(args);
+
 		if(newArticle) {
 			returnArticles.push(newArticle);
 		}
@@ -37,21 +43,38 @@ var createArticlesFromData = function(articleData) {
 	return returnArticles;
 }
 
-ArticleDataService.prototype.getArticleDataFromUrl = function(url) {
-	return EmbedlyService.extractDataFromUrl(url).then(
-		function(articleData){
-			return createArticlesFromData(articleData);
-		}
-	);
-}
-
 ArticleDataService.prototype.getArticleDataFromUrls = function(urls) {
 	if(urls.length > 0) {
-		return EmbedlyService.extractDataFromMultipleUrls(urls).then(
-			function(articleData){
-				return createArticlesFromData(articleData);
-			}
-		);
+		var articleExtractionPromises = [];
+
+		console.log('Creating article promises per url')
+
+		_.each(urls, function(url) {
+			var articlePromise = EmbedlyService.extractDataFromUrl(url);
+			articleExtractionPromises.push(articlePromise);
+		});
+
+		return Promise.all(articleExtractionPromises).then(function(promiseResults) {
+			console.log('Promises for articles returned');
+			
+
+			promiseResults = _.filter(promiseResults, function(promiseResult) {
+				return promiseResult !== null;
+			});
+
+			var jsonParsedArticles = [];
+			_.each(promiseResults, function(article){
+				try {
+					article = JSON.parse(article);
+					jsonParsedArticles.push(article);
+				}
+				catch(err) {
+					console.log('Error parsing article');
+				}
+			});
+
+			return createArticlesFromData(jsonParsedArticles);
+		});
 	}
 	else {
 		return new Promise.resolve();

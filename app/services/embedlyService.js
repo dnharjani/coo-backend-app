@@ -17,7 +17,7 @@ EmbedlyService.prototype.extractDataFromUrl = function(url) {
 		   	resolve(body);
 		  }
 		  else {
-		  	reject(error)
+		  	resolve(null)
 		  }
 		});
 	});
@@ -35,7 +35,7 @@ EmbedlyService.prototype.extractDataFromMultipleUrls = function(urls) {
 		   	resolve(body);
 		  }
 		  else {
-		  	reject(error)
+		  	resolve(null)
 		  }
 		});
 	});
